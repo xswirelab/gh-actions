@@ -1,0 +1,27 @@
+name: "setup nodejs"
+description: "Setup a NodeJS"
+
+inputs:
+  node-version:
+    description: "Node version, default is current LTS"
+    required: true
+    default: lts/*
+outputs:
+  cache-hit:
+    description: "Cache-hit output"
+    value: ${{ steps.node-cache.outputs.cache-hit }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: setup nodejs ${{ inputs.node-version }}
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ inputs.node-version }}
+
+    - name: cache node modules
+      id: node-cache
+      uses: actions/cache@v2
+      with:
+        path: node_modules
+        key: node-modules-${{ inputs.node-version }}-${{ hashFiles('package-lock.json') }}
