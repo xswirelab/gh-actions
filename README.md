@@ -1,2 +1,2 @@
-# gh-actions
+# Github actions & workflows
 Reusable GitHub Actions &amp; Workflows
