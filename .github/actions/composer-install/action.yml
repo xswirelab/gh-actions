@@ -1,0 +1,34 @@
+name: "composer install"
+description: "Install composer dependencies"
+
+inputs:
+  ignore-cache:
+    description: "Boolean switch to ignore cache"
+    default: false
+
+runs:
+  using: "composite"
+  steps:
+
+  - name: validate composer.json and composer.lock
+    run: composer validate
+
+  - name: run composer install / update
+    uses: "ramsey/composer-install@v2"
+    with:
+      composer-options: "--prefer-dist --no-progress --no-interaction --no-suggest --ignore-platform-reqs"
+      ignore-cache: ${{ inputs.ignore-cache }}
+
+#   - name: install composer dependencies
+#     run: composer install --prefer-dist --no-progress --no-interaction --no-suggest --ignore-platform-reqs
+
+#   - name: find composer cache directory
+#     id: composer-cache-directory
+#     run: "echo \"::set-output name=directory::$(composer config cache-dir)\""
+
+#   - name: cache composer dependencies
+#     uses: actions/cache@v2
+#     with:
+#       path: ${{ steps.composer-cache-directory.outputs.directory }}
+#       key: php-${{ inputs.php-version }}-${{ hashFiles('composer.lock') }}
+#       restore-keys: php-${{ inputs.php-version }}-composer-locked-
