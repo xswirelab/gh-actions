@@ -2,6 +2,9 @@ name: "npm install"
 description: "Install npm packages"
 
 inputs:
+  should-build:
+    description: "Npm build to run"
+    default: prod
   cache-was-hit:
     description: "Check if cache was hit"
     default: false
@@ -13,6 +16,8 @@ runs:
     - name: install npm packages
       if: ${{ inputs.cache-was-hit }} != true
       run: npm install --no-save
+      shell: bash
 
     - name: build assets
-      run: npm run prod
+      run: npm run ${{ inputs.should-build }}
+      shell: bash
