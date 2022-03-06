@@ -1,0 +1,48 @@
+name: "install craftcms"
+description: "Install the CraftCMS application"
+
+inputs:
+  username:
+    description: "CraftCMS initial user name"
+    default: "wirelab"
+  password:
+    description: "CraftCMS initial user password"
+    default: "password"
+  email:
+    description: "CraftCMS initial user email"
+    default: "algemeen@wirelab.nl"
+   
+runs:
+  using: "composite"
+  steps:
+  
+      - name: setup app-id
+        run: php craft setup/app-id --interactive=0
+        shell: bash
+
+      - name: setup security-key
+        run: php craft setup/security-key --interactive=0
+        shell: bash
+        
+      - name: setup security-key
+        run: php craft setup/security-key --interactive=0
+        shell: bash
+      
+      - name: install craftcms 
+        run: |
+            php craft install/craft \
+            --username=${{ inputs.username }} \
+            --password=${{ inputs.password }} \
+            --email=${{ inputs.email }} \
+            --site-name="Site name" \
+            --site-url=$DEFAULT_SITE_URL \
+            --interactive=0
+        shell: bash
+
+      - name: migrate content
+        run: php craft migrate/up --track=content --interactive=0
+        shell: bash
+
+      - name: set folder permissions
+        run: chmod -R 777 config storage web/cpresources
+        shell: bash
