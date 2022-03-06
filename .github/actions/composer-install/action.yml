@@ -12,6 +12,7 @@ runs:
 
   - name: validate composer.json and composer.lock
     run: composer validate
+    shell: bash
 
   - name: run composer install / update
     uses: "ramsey/composer-install@v2"
