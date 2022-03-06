@@ -1,0 +1,18 @@
+name: "npm install"
+description: "Install npm packages"
+
+inputs:
+  cache-was-hit:
+    description: "Check if cache was hit"
+    default: false
+
+runs:
+  using: "composite"
+  steps:
+
+    - name: install npm packages
+      if: ${{ inputs.cache-was-hit }} != true
+      run: npm install --no-save
+
+    - name: build assets
+      run: npm run prod
